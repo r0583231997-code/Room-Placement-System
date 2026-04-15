@@ -1,0 +1,30 @@
+# Dependency directories (נפח גדול - אין צורך להעלות)
+node_modules/
+jspm_packages/
+
+# Environment variables (מכיל סיסמאות למסד הנתונים - קריטי!)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Build outputs (קבצים שנוצרים אוטומטית בהרצה)
+dist/
+build/
+out/
+
+# Debug logs (לוגים של שגיאות)
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS metadata (קבצי מערכת של המחשב האישי)
+.DS_Store
+Thumbs.db
+
+# IDE settings (הגדרות אישיות של עורך הקוד)
+.vscode/
+.idea/
+*.swp
+*.swo
