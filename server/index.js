@@ -2,7 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose'); // הוספת ספרייה לחיבור למסד הנתונים
 const cors = require('cors'); // מאפשר ל-React לתקשר עם השרת
 const Room = require('./models/Room'); // ייבוא המודל של החדר
-
+const PermanentPlacement = require('./models/PermanentPlacement');
+const TemporaryPlacement = require('./models/TemporaryPlacement');
 const app = express();
 const PORT = 5000;
 
