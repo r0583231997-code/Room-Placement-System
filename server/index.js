@@ -30,7 +30,55 @@ app.get('/api/rooms', async (req, res) => {
     res.status(500).json({ message: "שגיאה בשליפת החדרים" });
   }
 });
+// ===========
+// POST - יצירת חדר חדש
+app.post('/api/rooms', async (req, res) => {
+  try {
+    const room = new Room(req.body);
+    const newRoom = await room.save();
+    res.status(201).json(newRoom);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
 
+// GET - חדר לפי ID
+app.get('/api/rooms/:id', async (req, res) => {
+  try {
+    const room = await Room.findById(req.params.id);
+    if (!room) return res.status(404).json({ message: 'Room not found' });
+    res.json(room);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// PUT - עדכון חדר
+app.put('/api/rooms/:id', async (req, res) => {
+  try {
+    const updated = await Room.findByIdAndUpdate(
+      req.params.id, 
+      req.body, 
+      { new: true }
+    );
+    if (!updated) return res.status(404).json({ message: 'Room not found' });
+    res.json(updated);
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+});
+
+// DELETE - מחיקת חדר
+app.delete('/api/rooms/:id', async (req, res) => {
+  try {
+    const deleted = await Room.findByIdAndDelete(req.params.id);
+    if (!deleted) return res.status(404).json({ message: 'Room not found' });
+    res.json({ message: 'Room deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
+// ===================
 app.listen(PORT, () => {
   console.log(`Server is up on port ${PORT}`);
 });
