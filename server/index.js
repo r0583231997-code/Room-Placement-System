@@ -5,14 +5,14 @@ const Room = require('./models/Room'); // ייבוא המודל של החדר
 
 const app = express();
 const PORT = 5000;
-
+require('dotenv').config();
 // Middleware
 app.use(cors());
 app.use(express.json()); // מאפשר לשרת לקרוא מידע בפורמט JSON
 
 // חיבור למסד הנתונים MongoDB 
 // החליפו את המחרוזת למטה בקישור האמיתי מה-MongoDB Atlas שלכן
-mongoose.connect('mongodb+srv://s0548474312_db_user:Seminar123@cluster0.n1guyzq.mongodb.net/?appName=Cluster0')
+mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('Connected to MongoDB successfully'))
   .catch(err => console.error('Could not connect to MongoDB:', err));
 
