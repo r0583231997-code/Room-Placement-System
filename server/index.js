@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose'); // הוספת ספרייה לחיבור למסד הנתונים
 const cors = require('cors'); // מאפשר ל-React לתקשר עם השרת
@@ -5,7 +6,7 @@ const Room = require('./models/Room'); // ייבוא המודל של החדר
 
 const app = express();
 const PORT = 5000;
-require('dotenv').config();
+
 // Middleware
 app.use(cors());
 app.use(express.json()); // מאפשר לשרת לקרוא מידע בפורמט JSON
