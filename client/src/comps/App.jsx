@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from "./Navbar";
+import RoomManagement from "./RoomManagement"; // 1. ייבוא הקומפוננטה שכתבת
 import '../App.css'
 
 function App() {
@@ -8,7 +9,6 @@ function App() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // פנייה לשרת ה-Node.js שיושב בפורט 5000
     fetch('http://localhost:5000/api/rooms')
       .then((res) => res.json())
       .then((data) => {
@@ -24,7 +24,6 @@ function App() {
   return (
     <Router>
       <div className="app-container">
-        {/* סרגל הניווט שיופיע בכל הדפים */}
         <Navbar />
 
         <header>
@@ -33,32 +32,28 @@ function App() {
 
         <main>
           <Routes>
-            {/* דף הבית - מציג את רשימת החדרים הקיימת */}
+            {/* דף הבית */}
             <Route path="/" element={
               <section id="room-display">
                 <h2>רשימת חדרים קיימים</h2>
-                
-                {loading ? (
-                  <p>טוען נתונים מהמסד...</p>
-                ) : rooms.length > 0 ? (
-                  <div className="room-grid">
-                    {rooms.map((room) => (
-                      <div key={room._id} className="room-card">
-                        <h3>אגף {room.wing}</h3>
-                        <p>קומה: {room.floor}</p>
-                        <p>קיבולת: {room.size} בנות</p>
-                        <p>{room.hasProjector ? "✅ כולל מקרן" : "❌ ללא מקרן"}</p>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p>לא נמצאו חדרים במערכת.</p>
+                {loading ? <p>טוען נתונים...</p> : (
+                   <div className="room-grid">
+                     {rooms.map((room) => (
+                       <div key={room._id} className="room-card">
+                         <h3>אגף {room.wing}</h3>
+                         <p>קומה: {room.floor}</p>
+                         <p>קיבולת: {room.size}</p>
+                       </div>
+                     ))}
+                   </div>
                 )}
               </section>
             } />
 
-            {/* נתיבים נוספים שתוכלו למלא בהמשך המשימות מהטבלה */}
-            <Route path="/rooms" element={<div style={{padding: '20px'}}><h2>ניהול חדרים - דף בעבודה</h2></div>} />
+            {/* 2. חיבור דף ניהול חדרים לניתוב /rooms */}
+            <Route path="/rooms" element={<RoomManagement />} />
+
+            {/* דף שיבוץ בנות */}
             <Route path="/placement" element={<div style={{padding: '20px'}}><h2>שיבוץ בנות - דף בעבודה</h2></div>} />
           </Routes>
         </main>
@@ -67,4 +62,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
