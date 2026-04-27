@@ -7,6 +7,7 @@ const PermanentPlacement = require('./models/PermanentPlacement');
 const TemporaryPlacement = require('./models/TemporaryPlacement');
 const app = express();
 const PORT = 5000;
+const cancellationRoutes = require('./routes/cancellationRoutes');
 
 // Middleware
 app.use(cors());
@@ -80,7 +81,8 @@ app.delete('/api/rooms/:id', async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
-// ===================
+app.get('/test', (req, res) => res.send("השרת מזהה נתיבים חדשים!"));
+app.use('/api/cancellations', cancellationRoutes);
 app.listen(PORT, () => {
   console.log(`Server is up on port ${PORT}`);
 });
