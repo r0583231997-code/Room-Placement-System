@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const RoomManagement = () => {
   const [rooms, setRooms] = useState([]);
-  const [sortKey, setSortKey] = useState('wing'); // מפתח ברירת מחדל למיון
+  const [sortKey, setSortKey] = useState('wing');
 
   useEffect(() => {
     fetchRooms();
@@ -14,7 +14,6 @@ const RoomManagement = () => {
     setRooms(res.data);
   };
 
-  // פונקציית המיון בלקוח - נקייה ומהירה
   const sortedRooms = [...rooms].sort((a, b) => {
     if (a[sortKey] < b[sortKey]) return -1;
     if (a[sortKey] > b[sortKey]) return 1;
@@ -22,29 +21,50 @@ const RoomManagement = () => {
   });
 
   const handleDelete = async (id) => {
-    if (window.confirm("בטוחה שברצונך למחוק חדר זה?")) {
+    // בקשת אישור מהמשתמש לפני מחיקה (דרישת אפיון)
+    if (window.confirm("האם את בטוחה שברצונך למחוק חדר זה?")) {
       await axios.delete(`http://localhost:5000/api/rooms/${id}`);
-      fetchRooms(); // רענון הרשימה
+      fetchRooms();
+    }
+  };
+
+  // פונקציה לניקוי כל השיבוצים (דרישת אפיון)
+  const handleClearAllPlacements = async () => {
+    if (window.confirm("אזהרה: האם את בטוחה שברצונך לנקות את כל השיבוצים מכל החדרים?")) {
+      try {
+        await axios.delete('http://localhost:5000/api/placements/clear-all');
+        alert("כל השיבוצים נוקו בהצלחה.");
+      } catch (err) {
+        console.error("Error clearing placements:", err);
+      }
     }
   };
 
   return (
-    <div>
+    <div style={{ padding: '20px' }}>
       <h1>ניהול חדרים</h1>
       
-      {/* כפתורי מיון */}
-      <div className="sort-buttons">
+      <div className="action-bar" style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <button onClick={() => setSortKey('wing')}>מיין לפי אגף</button>
         <button onClick={() => setSortKey('floor')}>מיין לפי קומה</button>
         <button onClick={() => setSortKey('size')}>מיין לפי גודל</button>
+        
+        {/* כפתור ניקוי גורף */}
+        <button 
+          onClick={handleClearAllPlacements} 
+          style={{ backgroundColor: '#ff4d4d', color: 'white', marginLeft: 'auto' }}
+        >
+          🧹 ניקוי כל השיבוצים
+        </button>
       </div>
 
-      <table>
+      <table border="1" width="100%" style={{ borderCollapse: 'collapse', textAlign: 'right' }}>
         <thead>
-          <tr>
+          <tr style={{ backgroundColor: '#f2f2f2' }}>
             <th>אגף</th>
             <th>קומה</th>
-            <th>גודל</th>
+            <th>גודל (בנות)</th>
+            <th>מקרן</th>
             <th>פעולות</th>
           </tr>
         </thead>
@@ -54,9 +74,10 @@ const RoomManagement = () => {
               <td>{room.wing}</td>
               <td>{room.floor}</td>
               <td>{room.size}</td>
+              <td>{room.hasProjector ? "✅ קיים" : "❌ אין"}</td>
               <td>
                 <button onClick={() => handleDelete(room._id)}>מחיקה</button>
-                {/* כפתור עדכון יפתח כאן טופס/מודל */}
+                <button style={{ marginRight: '5px' }}>עדכון</button>
               </td>
             </tr>
           ))}
@@ -65,3 +86,5 @@ const RoomManagement = () => {
     </div>
   );
 };
+
+export default RoomManagement;
