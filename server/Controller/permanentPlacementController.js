@@ -42,3 +42,13 @@ export const deletePlacement = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getPlacementsByRoom = async (req, res) => {
+  try {
+    const { roomId } = req.params;
+    const placements = await PermanentPlacement.find({ room: roomId });
+    res.json(placements);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

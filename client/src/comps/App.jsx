@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Navbar from "./Navbar";
 import RoomManagement from "./RoomManagement"; // 1. ייבוא הקומפוננטה שכתבת
+import RoomSchedule from "./RoomSchedule"; // 1. ייבוא הקומפוננטה שכתבת
 import '../App.css'
 
 function App() {
@@ -55,6 +56,7 @@ function App() {
 
             {/* דף שיבוץ בנות */}
             <Route path="/placement" element={<div style={{padding: '20px'}}><h2>שיבוץ בנות - דף בעבודה</h2></div>} />
+         <Route path="/rooms/:id/schedule" element={<RoomSchedule />} />
           </Routes>
         </main>
       </div>

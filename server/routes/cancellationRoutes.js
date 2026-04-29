@@ -2,7 +2,8 @@ import express from 'express';
 import { 
   createCancellation, 
   getAllCancellations, 
-  deleteCancellation 
+  deleteCancellation,
+  getCancellationsByRoom
 } from '../controller/cancellationController.js';
 
 const router = express.Router();
@@ -15,5 +16,5 @@ router.get('/', getAllCancellations);
 
 // מחיקת ביטול לפי ID
 router.delete('/:id', deleteCancellation);
-
+router.get('/room/:roomId', getCancellationsByRoom);
 export default router;

@@ -33,3 +33,13 @@ export const deleteCancellation = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+export const getCancellationsByRoom = async (req, res) => {
+    try {
+        const { roomId } = req.params;
+        const cancellations = await Cancellation.find({ room: roomId });
+        res.json(cancellations);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
