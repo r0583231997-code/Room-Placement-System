@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-
-const permanentPlacementSchema = new mongoose.Schema({
+import mongoose from 'mongoose'
+const { Schema } = mongoose;
+const permanentPlacementSchema = new Schema({
   // קישור לחדר - מאפשר לשלוף את נתוני החדר (אגף, קומה וכו') [cite: 10]
   room: { 
     type: mongoose.Schema.Types.ObjectId, 
@@ -18,4 +18,4 @@ const permanentPlacementSchema = new mongoose.Schema({
   isActive: { type: Boolean, default: true }
 }, { timestamps: true }); // מוסיף אוטומטית תאריך יצירה ועדכון
 
-module.exports = mongoose.model('PermanentPlacement', permanentPlacementSchema);
+export default mongoose.model('PermanentPlacement', permanentPlacementSchema);

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-
-const temporaryPlacementSchema = new mongoose.Schema({
+import mongoose from 'mongoose'
+const { Schema } = mongoose;
+const temporaryPlacementSchema = new Schema({
   room: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Room', 
@@ -24,4 +24,4 @@ const temporaryPlacementSchema = new mongoose.Schema({
   notes: String
 }, { timestamps: true });
 
-module.exports = mongoose.model('TemporaryPlacement', temporaryPlacementSchema);
+export default mongoose.model('TemporaryPlacement', temporaryPlacementSchema);
