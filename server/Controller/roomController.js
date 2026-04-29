@@ -3,6 +3,7 @@ import PermanentPlacement from '../models/PermanentPlacement.js';
 import TemporaryPlacement from '../models/TemporaryPlacement.js';
 import Cancellation from '../models/Cancellation.js';
 
+
 /**
  * פונקציה לחיפוש החדר הפנוי הראשון בהתבסס על אילוצים וביטולים
  */

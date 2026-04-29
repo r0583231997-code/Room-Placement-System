@@ -53,4 +53,3 @@ export const findFirstAvailableRoom = async (req, res) => {
   }
 };
 
-module.exports = { findFirstAvailableRoom };

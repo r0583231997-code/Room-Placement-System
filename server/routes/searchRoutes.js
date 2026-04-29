@@ -8,11 +8,12 @@ import {
   deleteRoom
 } from '../controller/roomController.js';
 import { findFirstAvailableRoom } from '../Controller/RoomSearch.js';
+import validateWingAndFloor from '../middleware/Middleware.js';
 
 const router = express.Router();
 
 // סדר קריטי! הספציפי (search) תמיד מעל הכללי (:id)
-router.get('/search', findFirstAvailableRoom);
+router.get('/search', validateWingAndFloor, findFirstAvailableRoom);
 router.get('/', getAllRooms);
 router.post('/', createRoom);
 router.get('/:id', getRoomById);
