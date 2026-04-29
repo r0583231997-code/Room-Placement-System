@@ -1,12 +1,13 @@
 import express from 'express';
 import {
-  findFirstAvailableRoom,
+  
   getAllRooms,
   createRoom,
   getRoomById,
   updateRoom,
   deleteRoom
 } from '../controller/roomController.js';
+import { findFirstAvailableRoom } from '../Controller/RoomSearch.js';
 
 const router = express.Router();
 
