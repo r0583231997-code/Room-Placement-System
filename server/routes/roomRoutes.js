@@ -1,6 +1,7 @@
-const express = require('express');
+import express from 'express';
+import roomController from '../controller/roomController.js';
+
 const router = express.Router();
-const roomController = require('../controller/roomController');
 
 // סדר קריטי! הספציפי (search) תמיד מעל הכללי (:id)
 router.get('/search', roomController.findFirstAvailableRoom);
@@ -10,4 +11,4 @@ router.get('/:id', roomController.getRoomById);
 router.put('/:id', roomController.updateRoom);
 router.delete('/:id', roomController.deleteRoom);
 
-module.exports = router;
+export default router;
