@@ -1,14 +1,15 @@
 import express from 'express';
-import roomController from '../controller/roomController.js';
+import { createRoom, deleteRoom, findFirstAvailableRoom, getAllRooms, getRoomById, updateRoom } from '../Controller/roomController';
+
 
 const router = express.Router();
 
 // סדר קריטי! הספציפי (search) תמיד מעל הכללי (:id)
-router.get('/search', roomController.findFirstAvailableRoom);
-router.get('/', roomController.getAllRooms);
-router.post('/', roomController.createRoom);
-router.get('/:id', roomController.getRoomById);
-router.put('/:id', roomController.updateRoom);
-router.delete('/:id', roomController.deleteRoom);
+router.get('/search', findFirstAvailableRoom);
+router.get('/', getAllRooms);
+router.post('/', createRoom);
+router.get('/:id', getRoomById);
+router.put('/:id',updateRoom);
+router.delete('/:id', deleteRoom);
 
 export default router;
