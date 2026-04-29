@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
-
-const cancellationSchema = new mongoose.Schema({
+import mongoose from 'mongoose'
+const { Schema } = mongoose;
+const cancellationSchema = new Schema({
   room: { 
     type: mongoose.Schema.Types.ObjectId, 
     ref: 'Room', 
@@ -16,4 +16,4 @@ const cancellationSchema = new mongoose.Schema({
   } // למה החדר מבוטל (שיפוץ, אירוע וכו')
 });
 
-module.exports = mongoose.model('Cancellation', cancellationSchema);
+export default mongoose.model('Cancellation', cancellationSchema);

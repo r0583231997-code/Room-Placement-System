@@ -1,10 +1,10 @@
-const mongoose = require('mongoose');
-
-const roomSchema = new mongoose.Schema({
+import mongoose from 'mongoose'
+const { Schema } = mongoose;
+const roomSchema = new Schema({
   wing: { type: String, required: true },    // אגף 
   floor: { type: Number, required: true },   // קומה 
   size: { type: Number, required: true },    // גודל 
   hasProjector: { type: Boolean, default: false } // האם קיים מקרן 
 });
 
-module.exports = mongoose.model('Room', roomSchema);
+export default mongoose.model('Room', roomSchema);

@@ -1,7 +1,7 @@
-const Cancellation = require('../models/Cancellation');
+import Cancellation from '../models/Cancellation.js';
 
 // 1. יצירת ביטול חדש
-exports.createCancellation = async (req, res) => {
+export const createCancellation = async (req, res) => {
   try {
     const newCancellation = new Cancellation(req.body);
     await newCancellation.save();
@@ -12,20 +12,22 @@ exports.createCancellation = async (req, res) => {
 };
 
 // 2. קבלת כל הביטולים
-exports.getAllCancellations = async (req, res) => {
+export const getAllCancellations = async (req, res) => {
   try {
-    const cancellations = await Cancellation.find().populate('room'); // populate מביא גם את פרטי החדר
+    const cancellations = await Cancellation.find().populate('room');
     res.json(cancellations);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 };
 
-// 3. מחיקת ביטול (ביטול ה"ביטול")
-exports.deleteCancellation = async (req, res) => {
+// 3. מחיקת ביטול
+export const deleteCancellation = async (req, res) => {
   try {
     const deleted = await Cancellation.findByIdAndDelete(req.params.id);
-    if (!deleted) return res.status(404).json({ message: 'הביטול לא נמצא' });
+    if (!deleted) {
+      return res.status(404).json({ message: 'הביטול לא נמצא' });
+    }
     res.json({ message: 'הביטול נמחק בהצלחה' });
   } catch (error) {
     res.status(500).json({ message: error.message });

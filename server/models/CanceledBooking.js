@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose'
 const { Schema } = mongoose;
 
 const canceledBookingSchema = new Schema({
@@ -8,5 +8,4 @@ const canceledBookingSchema = new Schema({
   endTime: { type: String, required: true },
 });
 
-const CanceledBooking = mongoose.model('CanceledBooking', canceledBookingSchema);
-module.exports = CanceledBooking;
+export default mongoose.model('CanceledBooking', canceledBookingSchema);
