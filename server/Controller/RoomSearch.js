@@ -48,7 +48,9 @@ export const findFirstAvailableRoom = async (req, res) => {
 
     res.status(404).json({ message: "No available rooms found for the requested time" });
 
-  } catch (error) {
-    res.status(500).json({ message: "Error in fast search", error: error.message });
-  }
-};
+//   } catch (error) {
+//     res.status(500).json({ message: "Error in fast search", error: error.message });
+//   }
+// };
+
+// module.exports = { findFirstAvailableRoom };
