@@ -130,3 +130,18 @@ export const clearRoomPlacements = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+export const clearAllRoomsPlacements = async (req, res) => {
+    try {
+        const rooms = await Room.find();
+        
+        for (const room of rooms) {
+            await PermanentPlacement.deleteMany({ room: room._id });
+            await TemporaryPlacement.deleteMany({ room: room._id });
+        }
+
+        res.json({ message: 'כל השיבוצים של כל החדרים נמחקו בהצלחה' });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
