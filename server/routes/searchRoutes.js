@@ -8,7 +8,7 @@ import {
   deleteRoom
 } from '../controller/roomController.js';
 import { findFirstAvailableRoom } from '../Controller/RoomSearch.js';
-import validateWingAndFloor from '../middleware/Middleware.js';
+import validateWingAndFloor from '../Middleware.js';
 
 const router = express.Router();
 
