@@ -1,10 +1,10 @@
 import express from 'express';
-import { createRoom, deleteRoom, findFirstAvailableRoom, getAllRooms, getRoomById, updateRoom, clearRoomPlacements } from '../Controller/roomController.js';
-import validateWingAndFloor from '../Middleware.js';
+import { createRoom, deleteRoom, findFirstAvailableRoom, getAllRooms, getRoomById, updateRoom, clearRoomPlacements, getAllAvailableRooms } from '../Controller/roomController.js';import validateWingAndFloor from '../Middleware.js';
 const router = express.Router();
 
 // סדר קריטי! הספציפי (search) תמיד מעל הכללי (:id)
 router.get('/search', validateWingAndFloor, findFirstAvailableRoom);
+router.get('/available', validateWingAndFloor, getAllAvailableRooms);
 router.get('/', getAllRooms);
 router.post('/', createRoom);
 router.get('/:id', getRoomById);

@@ -11,6 +11,23 @@ export const getAllPlacements = async (req, res) => {
 
 export const createPlacement = async (req, res) => {
   try {
+    const { room, dayOfWeek, startTime, endTime, purpose } = req.body;
+
+    // בדיקת התנגשות עם שיבוץ קיים באותו חדר, באותו יום, באותה שעה
+    const conflict = await PermanentPlacement.findOne({
+      room,
+      dayOfWeek,
+      isActive: true,
+      startTime: { $lt: endTime },
+      endTime: { $gt: startTime }
+    });
+
+    if (conflict) {
+      return res.status(409).json({
+        message: `⚠️ התנגשות! החדר כבר תפוס ביום זה בין ${conflict.startTime} ל-${conflict.endTime} (${conflict.purpose})`
+      });
+    }
+
     const placement = new PermanentPlacement(req.body);
     const newPlacement = await placement.save();
     res.status(201).json(newPlacement);

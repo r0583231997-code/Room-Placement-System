@@ -33,8 +33,7 @@ app.get('/test', (req, res) => res.send("השרת מזהה נתיבים חדשי
 app.use('/api/rooms', roomRoutes);
 app.use('/api/cancellations', cancellationRoutes);
 app.use('/api/permanent-placements', permanentPlacementRoutes);
-app.use('/api/rooms', searchRoutes);
-// הפעלת השרת
+app.use('/api/temporary-placements', temporaryPlacementRoutes);// הפעלת השרת
 app.listen(PORT, () => {
   console.log(`Server is up on port ${PORT}`);
 });

@@ -9,6 +9,7 @@ const Navbar = () => {
         <li><Link to="/">דף הבית</Link></li>
         <li><Link to="/rooms">ניהול חדרים</Link></li>
         <li><Link to="/placement">שיבוץ בנות</Link></li>
+        <li><Link to="/search">🔍 חיפוש חדר</Link></li>
       </ul>
     </nav>
   );
