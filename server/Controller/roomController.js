@@ -146,3 +146,65 @@ export const clearAllRoomsPlacements = async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 };
+
+// מחזיר את כל החדרים הפנויים לטווח זמן מסוים (לדף החיפוש)
+export const getAllAvailableRooms = async (req, res) => {
+  try {
+    const { date, startTime, endTime, minSize, wing, floor, hasProjector } = req.query;
+    const searchDate = new Date(date);
+    const dayOfWeek = ['א', 'ב', 'ג', 'ד', 'ה', 'ו'][searchDate.getDay()];
+
+    let query = {};
+    if (minSize) query.size = { $gte: Number(minSize) };
+    if (wing) query.wing = wing;
+    if (floor) query.floor = Number(floor);
+    if (hasProjector !== undefined && hasProjector !== '')
+      query.hasProjector = hasProjector === 'true';
+
+    const allRooms = await Room.find(query);
+    const availableRooms = [];
+
+    for (const room of allRooms) {
+      const isCancelled = await Cancellation.findOne({
+        room: room._id,
+        date: {
+          $gte: new Date(new Date(searchDate).setHours(0, 0, 0, 0)),
+          $lte: new Date(new Date(searchDate).setHours(23, 59, 59, 999))
+        }
+      });
+      if (isCancelled) continue;
+
+      const isPermanentOccupied = await PermanentPlacement.findOne({
+        room: room._id,
+        dayOfWeek,
+        isActive: true,
+        startTime: { $lt: endTime },
+        endTime: { $gt: startTime }
+      });
+
+      const isTemporaryOccupied = await TemporaryPlacement.findOne({
+        room: room._id,
+        date: { $gte: new Date(new Date(searchDate).setHours(0,0,0,0)), $lte: new Date(new Date(searchDate).setHours(23,59,59,999)) },
+        type: 'placement',
+        startTime: { $lt: endTime },
+        endTime: { $gt: startTime }
+      });
+
+      const isReleased = await TemporaryPlacement.findOne({
+        room: room._id,
+        date: { $gte: new Date(new Date(searchDate).setHours(0,0,0,0)), $lte: new Date(new Date(searchDate).setHours(23,59,59,999)) },
+        type: 'release',
+        startTime: { $lt: endTime },
+        endTime: { $gt: startTime }
+      });
+
+      if (!isTemporaryOccupied && (!isPermanentOccupied || isReleased)) {
+        availableRooms.push(room);
+      }
+    }
+
+    res.json(availableRooms);
+  } catch (error) {
+    res.status(500).json({ message: "שגיאה בחיפוש", error: error.message });
+  }
+};
