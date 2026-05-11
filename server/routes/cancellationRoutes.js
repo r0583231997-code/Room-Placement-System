@@ -1,14 +1,20 @@
-const express = require('express');
+import express from 'express';
+import { 
+  createCancellation, 
+  getAllCancellations, 
+  deleteCancellation,
+  getCancellationsByRoom
+} from '../controller/cancellationController.js';
+
 const router = express.Router();
-const cancelController = require('../controller/cancellationController');
 
-// נתיב ליצירת ביטול: POST /api/cancellations
-router.post('/', cancelController.createCancellation);
+// יצירת ביטול
+router.post('/', createCancellation);
 
-// נתיב לקבלת כל הביטולים: GET /api/cancellations
-router.get('/', cancelController.getAllCancellations);
+// קבלת כל הביטולים
+router.get('/', getAllCancellations);
 
-// נתיב למחיקת ביטול לפי ID: DELETE /api/cancellations/:id
-router.delete('/:id', cancelController.deleteCancellation);
-
-module.exports = router;
+// מחיקת ביטול לפי ID
+router.delete('/:id', deleteCancellation);
+router.get('/room/:roomId', getCancellationsByRoom);
+export default router;

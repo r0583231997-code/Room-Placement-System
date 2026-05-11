@@ -1,13 +1,15 @@
-const express = require('express');
+import express from 'express';
+import { createRoom, deleteRoom, findFirstAvailableRoom, getAllRooms, getRoomById, updateRoom, clearRoomPlacements, getAllAvailableRooms } from '../Controller/roomController.js';import validateWingAndFloor from '../Middleware.js';
 const router = express.Router();
-const roomController = require('../controller/roomController');
 
 // סדר קריטי! הספציפי (search) תמיד מעל הכללי (:id)
-router.get('/search', roomController.findFirstAvailableRoom);
-router.get('/', roomController.getAllRooms);
-router.post('/', roomController.createRoom);
-router.get('/:id', roomController.getRoomById);
-router.put('/:id', roomController.updateRoom);
-router.delete('/:id', roomController.deleteRoom);
+router.get('/search', validateWingAndFloor, findFirstAvailableRoom);
+router.get('/available', validateWingAndFloor, getAllAvailableRooms);
+router.get('/', getAllRooms);
+router.post('/', createRoom);
+router.get('/:id', getRoomById);
+router.put('/:id', validateWingAndFloor, updateRoom);
+router.delete('/:id', validateWingAndFloor, deleteRoom);
+router.delete('/:id/clear-placements', validateWingAndFloor, clearRoomPlacements);
 
-module.exports = router;
+export default router;

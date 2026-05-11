@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom'; // הוספנו את הייבוא הזה בשביל הניווט
 
 const RoomManagement = () => {
   const [rooms, setRooms] = useState([]);
   const [sortKey, setSortKey] = useState('wing');
+  const navigate = useNavigate(); // אתחול פונקציית הניווט
 
   useEffect(() => {
     fetchRooms();
@@ -52,7 +54,7 @@ const RoomManagement = () => {
         {/* כפתור ניקוי גורף */}
         <button 
           onClick={handleClearAllPlacements} 
-          style={{ backgroundColor: '#ff4d4d', color: 'white', marginLeft: 'auto' }}
+          style={{ backgroundColor: '#ff4d4d', color: 'white', marginRight: 'auto' }}
         >
           🧹 ניקוי כל השיבוצים
         </button>
@@ -76,8 +78,15 @@ const RoomManagement = () => {
               <td>{room.size}</td>
               <td>{room.hasProjector ? "✅ קיים" : "❌ אין"}</td>
               <td>
-                <button onClick={() => handleDelete(room._id)}>מחיקה</button>
-                <button style={{ marginRight: '5px' }}>עדכון</button>
+                {/* כפתור חדש למעבר למערכת השעות של החדר */}
+                <button 
+                  onClick={() => navigate(`/rooms/${room._id}/schedule`)} 
+                  style={{ backgroundColor: '#4CAF50', color: 'white', marginLeft: '5px' }}
+                >
+                  📅 מערכת שעות
+                </button>
+                <button onClick={() => handleDelete(room._id)} style={{ marginLeft: '5px' }}>מחיקה</button>
+                <button>עדכון</button>
               </td>
             </tr>
           ))}

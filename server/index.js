@@ -1,110 +1,16 @@
-// require('dotenv').config();
-// const express = require('express');
-// const mongoose = require('mongoose'); // הוספת ספרייה לחיבור למסד הנתונים
-// const cors = require('cors'); // מאפשר ל-React לתקשר עם השרת
-// const Room = require('./models/Room'); // ייבוא המודל של החדר
-// const PermanentPlacement = require('./models/PermanentPlacement');
-// const TemporaryPlacement = require('./models/TemporaryPlacement');
-// const app = express();
-// const PORT = 5000;
-// const cancellationRoutes = require('./routes/cancellationRoutes');
-// const roomController = require('./controller/roomController'); 
-// // Middleware
-// app.use(cors());
-// app.use(express.json()); // מאפשר לשרת לקרוא מידע בפורמט JSON
+import dotenv from 'dotenv';
+dotenv.config();
 
-// // חיבור למסד הנתונים MongoDB 
-// // החליפו את המחרוזת למטה בקישור האמיתי מה-MongoDB Atlas שלכן
-// mongoose.connect(process.env.MONGO_URI)
-//   .then(() => console.log('Connected to MongoDB successfully'))
-//   .catch(err => console.error('Could not connect to MongoDB:', err));
-
-// // נתיב לבדיקה (מה שהיה לך קודם)
-// app.get('/', (req, res) => {
-//   res.send('Server is running and connected to DB!');
-// });
-
-// // נתיב לשליפת כל החדרים לצורך שיבוץ [cite: 7, 9]
-// app.get('/api/rooms', async (req, res) => {
-//   try {
-//     const rooms = await Room.find(); // שליפת הנתונים בפועל [cite: 9]
-//     res.json(rooms);
-//   } catch (error) {
-//     res.status(500).json({ message: "שגיאה בשליפת החדרים" });
-//   }
-// });
-// // אם הפונקציה נמצאת בקובץ נפרד ב-controller:
-
-
-// // --- שלב 2: סדר הנתיבים (קריטי!) ---
-
-// // א. קודם כל - שליפת כל החדרים
-
-
-// // ב. הוספת נתיב החיפוש כאן! (לפני ה-ID)
-// app.get('/api/rooms/search', roomController.findFirstAvailableRoom);
-// // ===========
-// // POST - יצירת חדר חדש
-// app.post('/api/rooms', async (req, res) => {
-//   try {
-//     const room = new Room(req.body);
-//     const newRoom = await room.save();
-//     res.status(201).json(newRoom);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// });
-
-// // GET - חדר לפי ID
-// app.get('/api/rooms/:id', async (req, res) => {
-//   try {
-//     const room = await Room.findById(req.params.id);
-//     if (!room) return res.status(404).json({ message: 'Room not found' });
-//     res.json(room);
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
-
-// // PUT - עדכון חדר
-// app.put('/api/rooms/:id', async (req, res) => {
-//   try {
-//     const updated = await Room.findByIdAndUpdate(
-//       req.params.id, 
-//       req.body, 
-//       { new: true }
-//     );
-//     if (!updated) return res.status(404).json({ message: 'Room not found' });
-//     res.json(updated);
-//   } catch (error) {
-//     res.status(400).json({ message: error.message });
-//   }
-// });
-
-// // DELETE - מחיקת חדר
-// app.delete('/api/rooms/:id', async (req, res) => {
-//   try {
-//     const deleted = await Room.findByIdAndDelete(req.params.id);
-//     if (!deleted) return res.status(404).json({ message: 'Room not found' });
-//     res.json({ message: 'Room deleted successfully' });
-//   } catch (error) {
-//     res.status(500).json({ message: error.message });
-//   }
-// });
-// app.get('/test', (req, res) => res.send("השרת מזהה נתיבים חדשים!"));
-// app.use('/api/cancellations', cancellationRoutes);
-// app.listen(PORT, () => {
-//   console.log(`Server is up on port ${PORT}`);
-// });
-
-require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from 'cors';
 
 // ייבוא ה-Routes
-const cancellationRoutes = require('./routes/cancellationRoutes');
-const roomRoutes = require('./routes/roomRoutes');
+import cancellationRoutes from './routes/cancellationRoutes.js';
+import roomRoutes from './routes/roomRoutes.js';
+import permanentPlacementRoutes from './routes/permanentPlacementRoutes.js';
+import searchRoutes from './routes/searchRoutes.js';
+import temporaryPlacementRoutes from './routes/temporaryPlacementRoutes.js';
 
 const app = express();
 const PORT = 5000;
@@ -120,15 +26,14 @@ mongoose.connect(process.env.MONGO_URI)
 
 // --- הגדרת הנתיבים (Routes) ---
 
-// נתיבי בדיקה כלליים
 app.get('/', (req, res) => res.send('Server is running and connected to DB!'));
 app.get('/test', (req, res) => res.send("השרת מזהה נתיבים חדשים!"));
 
-// חיבור הראוטים המופרדים
+// חיבור הראוטים
 app.use('/api/rooms', roomRoutes);
 app.use('/api/cancellations', cancellationRoutes);
-
-// הפעלת השרת
+app.use('/api/permanent-placements', permanentPlacementRoutes);
+app.use('/api/temporary-placements', temporaryPlacementRoutes);// הפעלת השרת
 app.listen(PORT, () => {
   console.log(`Server is up on port ${PORT}`);
 });
