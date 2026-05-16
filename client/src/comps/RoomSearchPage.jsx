@@ -17,7 +17,6 @@ const RoomSearchPage = () => {
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // מצב טופס שיבוץ זמני לחדר ספציפי
   const [activePlacementRoom, setActivePlacementRoom] = useState(null);
   const [tempForm, setTempForm] = useState({ purpose: '', type: 'placement' });
 
@@ -28,7 +27,6 @@ const RoomSearchPage = () => {
     }
     setLoading(true);
     try {
-      // בניית query string רק עם שדות שמולאו
       const params = new URLSearchParams();
       Object.entries(searchParams).forEach(([key, val]) => {
         if (val !== '') params.append(key, val);
@@ -69,187 +67,120 @@ const RoomSearchPage = () => {
   };
 
   return (
-    <div style={{ padding: '20px', direction: 'rtl', textAlign: 'right' }}>
-      <h1>🔍 חיפוש חדר פנוי</h1>
+    <div className="search-page">
+      <h2 style={{ fontSize: '2.2rem', display: 'flex', alignItems: 'center', gap: '15px' }}>
+        <span>🔍</span> חיפוש חדר פנוי
+      </h2>
 
-      {/* טופס חיפוש */}
-      <div style={{
-        background: '#f9f9f9',
-        padding: '20px',
-        borderRadius: '8px',
-        border: '1px solid #ddd',
-        marginBottom: '30px'
-      }}>
-        <h3>פרמטרי חיפוש:</h3>
+      {/* טופס חיפוש - משתמש בכרטיסייה הלבנה והרעננה */}
+      <div className="hero-dashboard" style={{ borderRight: '6px solid var(--mint-primary)', flexDirection: 'column', alignItems: 'flex-start' }}>
+        <h3 style={{ marginBottom: '1.5rem', color: 'var(--text-main)' }}>פרמטרי חיפוש</h3>
+        
+        <div className="search-form-grid" style={{ 
+          display: 'grid', 
+          gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', 
+          gap: '20px', 
+          width: '100%' 
+        }}>
+          <div className="input-group">
+            <label style={{ display: 'block', fontWeight: '700', marginBottom: '8px', fontSize: '0.9rem' }}>📅 תאריך</label>
+            <input type="date" className="view-btn" style={{ background: 'white', border: '1px solid #e2e8f0', textAlign: 'right' }}
+              value={searchParams.date} onChange={e => setSearchParams({ ...searchParams, date: e.target.value })} />
+          </div>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px', alignItems: 'flex-end' }}>
-          <label>
-            📅 תאריך: *
-            <input type="date" value={searchParams.date}
-              onChange={e => setSearchParams({ ...searchParams, date: e.target.value })} />
-          </label>
+          <div className="input-group">
+            <label style={{ display: 'block', fontWeight: '700', marginBottom: '8px', fontSize: '0.9rem' }}>🕐 התחלה</label>
+            <input type="time" className="view-btn" style={{ background: 'white', border: '1px solid #e2e8f0' }}
+              value={searchParams.startTime} onChange={e => setSearchParams({ ...searchParams, startTime: e.target.value })} />
+          </div>
 
-          <label>
-            🕐 שעת התחלה: *
-            <input type="time" value={searchParams.startTime}
-              onChange={e => setSearchParams({ ...searchParams, startTime: e.target.value })} />
-          </label>
+          <div className="input-group">
+            <label style={{ display: 'block', fontWeight: '700', marginBottom: '8px', fontSize: '0.9rem' }}>🕑 סיום</label>
+            <input type="time" className="view-btn" style={{ background: 'white', border: '1px solid #e2e8f0' }}
+              value={searchParams.endTime} onChange={e => setSearchParams({ ...searchParams, endTime: e.target.value })} />
+          </div>
 
-          <label>
-            🕑 שעת סיום: *
-            <input type="time" value={searchParams.endTime}
-              onChange={e => setSearchParams({ ...searchParams, endTime: e.target.value })} />
-          </label>
+          <div className="input-group">
+            <label style={{ display: 'block', fontWeight: '700', marginBottom: '8px', fontSize: '0.9rem' }}>👥 כמות בנות</label>
+            <input type="number" placeholder="לדוג' 30" className="view-btn" style={{ background: 'white', border: '1px solid #e2e8f0' }}
+              value={searchParams.minSize} onChange={e => setSearchParams({ ...searchParams, minSize: e.target.value })} />
+          </div>
 
-          <label>
-            👥 גודל מינימלי:
-            <input type="number" placeholder="כמות בנות" value={searchParams.minSize}
-              onChange={e => setSearchParams({ ...searchParams, minSize: e.target.value })} />
-          </label>
-
-          <label>
-            🏢 אגף:
-            <select value={searchParams.wing}
-              onChange={e => setSearchParams({ ...searchParams, wing: e.target.value })}>
+          <div className="input-group">
+            <label style={{ display: 'block', fontWeight: '700', marginBottom: '8px', fontSize: '0.9rem' }}>🏢 אגף</label>
+            <select className="view-btn" style={{ background: 'white', border: '1px solid #e2e8f0' }}
+              value={searchParams.wing} onChange={e => setSearchParams({ ...searchParams, wing: e.target.value })}>
               <option value="">הכל</option>
               <option value="שמאל">שמאל</option>
               <option value="ימין">ימין</option>
               <option value="מרכז">מרכז</option>
               <option value="חדש">חדש</option>
             </select>
-          </label>
-
-          <label>
-            🔢 קומה:
-            <input type="number" placeholder="קומה" value={searchParams.floor}
-              onChange={e => setSearchParams({ ...searchParams, floor: e.target.value })} />
-          </label>
-
-          <label>
-            📽️ מקרן:
-            <select value={searchParams.hasProjector}
-              onChange={e => setSearchParams({ ...searchParams, hasProjector: e.target.value })}>
-              <option value="">לא משנה</option>
-              <option value="true">נדרש מקרן</option>
-              <option value="false">ללא מקרן</option>
-            </select>
-          </label>
+          </div>
         </div>
 
-        <button
-          onClick={handleSearch}
-          style={{
-            marginTop: '15px',
-            padding: '10px 25px',
-            backgroundColor: '#2c3e50',
-            color: 'white',
-            border: 'none',
-            borderRadius: '5px',
-            cursor: 'pointer',
-            fontSize: '16px'
-          }}
-        >
+        <button className="action-btn" style={{ marginTop: '2rem', width: '250px' }} onClick={handleSearch}>
           {loading ? 'מחפש...' : '🔍 חפש חדרים פנויים'}
         </button>
       </div>
 
-      {/* תוצאות */}
+      {/* תצוגת תוצאות */}
       {searched && (
-        <div>
-          <h2>
-            {results.length > 0
-              ? `נמצאו ${results.length} חדרים פנויים:`
-              : '❌ לא נמצאו חדרים פנויים לזמן המבוקש'}
-          </h2>
+        <section>
+          <h3 style={{ marginBottom: '2rem' }}>
+            {results.length > 0 ? `נמצאו ${results.length} חדרים פנויים:` : '❌ לא נמצאו חדרים פנויים'}
+          </h3>
 
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '15px' }}>
+          <div className="room-grid">
             {results.map(room => (
-              <div key={room._id} style={{
-                border: '1px solid #ccc',
-                borderRadius: '8px',
-                padding: '15px',
-                minWidth: '220px',
-                backgroundColor: '#fff',
-                boxShadow: '0 2px 5px rgba(0,0,0,0.1)'
-              }}>
-                <h3 style={{ marginTop: 0 }}>אגף {room.wing}</h3>
-                <p>קומה: {room.floor}</p>
-                <p>קיבולת: {room.size} בנות</p>
-                <p>{room.hasProjector ? '✅ יש מקרן' : '❌ אין מקרן'}</p>
+              <div key={room._id} className="room-card">
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                  <h3 style={{ margin: 0 }}>אגף {room.wing}</h3>
+                  <span className="room-tag">קומה {room.floor}</span>
+                </div>
+                
+                <div className="room-details" style={{ margin: '1.5rem 0' }}>
+                  <p><span>קיבולת:</span> <strong>{room.size} בנות</strong></p>
+                  <p><span>מקרן:</span> <strong>{room.hasProjector ? '✅ קיים' : '❌ אין'}</strong></p>
+                </div>
 
-                <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                  <button
-                    onClick={() => setActivePlacementRoom(activePlacementRoom === room._id ? null : room._id)}
-                    style={{
-                      backgroundColor: '#27ae60',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      padding: '6px 12px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    ➕ הוסף שיבוץ זמני
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <button className="action-btn" style={{ flex: 2, padding: '10px', fontSize: '0.85rem' }}
+                    onClick={() => setActivePlacementRoom(activePlacementRoom === room._id ? null : room._id)}>
+                    ➕ שיבוץ זמני
                   </button>
-
-                  <button
-                    onClick={() => navigate(`/rooms/${room._id}/schedule`)}
-                    style={{
-                      backgroundColor: '#3498db',
-                      color: 'white',
-                      border: 'none',
-                      borderRadius: '4px',
-                      padding: '6px 12px',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    📅 מערכת שעות
+                  <button className="view-btn" style={{ flex: 1, margin: 0 }}
+                    onClick={() => navigate(`/rooms/${room._id}/schedule`)}>
+                    לו"ז
                   </button>
                 </div>
 
-                {/* טופס שיבוץ זמני לחדר זה */}
+                {/* טופס שיבוץ פנימי (Inline) */}
                 {activePlacementRoom === room._id && (
-                  <div style={{
-                    marginTop: '10px',
-                    padding: '10px',
-                    backgroundColor: '#ecf0f1',
-                    borderRadius: '6px'
+                  <div style={{ 
+                    marginTop: '15px', 
+                    padding: '15px', 
+                    background: 'var(--mint-light)', 
+                    borderRadius: '12px',
+                    border: '1px solid var(--mint-primary)' 
                   }}>
-                    <select
-                      value={tempForm.type}
-                      onChange={e => setTempForm({ ...tempForm, type: e.target.value })}
-                      style={{ marginBottom: '6px', width: '100%' }}
-                    >
+                    <select className="view-btn" style={{ background: 'white', marginBottom: '10px' }}
+                      value={tempForm.type} onChange={e => setTempForm({ ...tempForm, type: e.target.value })}>
                       <option value="placement">שיבוץ חדר</option>
                       <option value="release">שחרור חדר מקבוע</option>
                     </select>
-                    <input
-                      type="text"
-                      placeholder="סיבת השיבוץ / מטרה"
-                      value={tempForm.purpose}
-                      onChange={e => setTempForm({ ...tempForm, purpose: e.target.value })}
-                      style={{ width: '100%', marginBottom: '6px', boxSizing: 'border-box' }}
-                    />
-                    <button
-                      onClick={() => handleAddTempPlacement(room._id)}
-                      style={{
-                        backgroundColor: '#e67e22',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '4px',
-                        padding: '6px 12px',
-                        cursor: 'pointer',
-                        width: '100%'
-                      }}
-                    >
-                      ✔️ אשרי שיבוץ
+                    <input type="text" placeholder="סיבת השיבוץ" className="view-btn" style={{ background: 'white', marginBottom: '10px' }}
+                      value={tempForm.purpose} onChange={e => setTempForm({ ...tempForm, purpose: e.target.value })} />
+                    <button className="action-btn" style={{ width: '100%', padding: '8px', background: 'var(--text-main)' }}
+                      onClick={() => handleAddTempPlacement(room._id)}>
+                      אישור שיבוץ
                     </button>
                   </div>
                 )}
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
     </div>
   );
